@@ -41,6 +41,9 @@ int main(){
     // std::cout << c.real();
     MandelbrotPointInfo cPointInfo = compute_mandelbrot(c,10,true);
     std::cout << cPointInfo.initial_point << std::endl << cPointInfo.escaped << std::endl << cPointInfo.num_iters << std::endl <<cPointInfo.max_iters << std::endl;
-
+    for(int i=0; i < cPointInfo.points_in_path.size(); i++)
+    {
+    std::cout << cPointInfo.points_in_path.at(i) << std::endl;
+    }
 
 }
