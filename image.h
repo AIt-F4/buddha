@@ -18,7 +18,7 @@ using std::vector;
  */
 class Image {
     //! The actual data for each pixel in the image.
-    vector<int> data;
+    vector<int> data; 
 
     //! The width of the image.
     int width;

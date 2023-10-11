@@ -2,10 +2,16 @@
 #include <iostream>
 #include <random>
 // random number generator
+
+
+d_complex gen_complex(double min_x, double max_x, double min_y, double max_y)
+{
 std::random_device rd;
 std::mt19937 gen(rd());
 std::uniform_real_distribution<double> real(-2,1); // real range
 std::uniform_real_distribution<double> imaginary(-1.5,1.5); // imaginary range
+return complex<double>{real(gen),imaginary(gen)};
+}
 
 MandelbrotPointInfo compute_mandelbrot(complex<double> c, int max_iters, bool collect_points) 
 {
@@ -32,18 +38,14 @@ MandelbrotPointInfo compute_mandelbrot(complex<double> c, int max_iters, bool co
     return pointInfo;
 }
 
-int main(){
-    double c_real = real(gen);
-    double c_imaginary = imaginary(gen); 
 
-    std::complex c = std::complex(c_real ,c_imaginary);
-    // std::cout << c << std::endl << std::pow(c,2) << std::endl;
-    // std::cout << c.real();
-    MandelbrotPointInfo cPointInfo = compute_mandelbrot(c,10,true);
-    std::cout << cPointInfo.initial_point << std::endl << cPointInfo.escaped << std::endl << cPointInfo.num_iters << std::endl <<cPointInfo.max_iters << std::endl;
-    for(int i=0; i < cPointInfo.points_in_path.size(); i++)
-    {
-    std::cout << cPointInfo.points_in_path.at(i) << std::endl;
-    }
+//int main(){
+    // std::complex c = gen_complex(-2.0,1.0,-1.5,1.5);
+    // MandelbrotPointInfo cPointInfo = compute_mandelbrot(c,10,true);
+    // std::cout << cPointInfo.initial_point << std::endl << cPointInfo.escaped << std::endl << cPointInfo.num_iters << std::endl <<cPointInfo.max_iters << std::endl;
+    // for(int i=0; i < cPointInfo.points_in_path.size(); i++)
+    // {
+    // std::cout << cPointInfo.points_in_path.at(i) << std::endl;
+    // }
 
-}
+//}

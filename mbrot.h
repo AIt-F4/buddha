@@ -7,6 +7,8 @@ using std::vector;
 using d_complex = complex<double>;
 
 
+
+
 //! Represents a point that the Mandelbrot function has been computed on.
 struct MandelbrotPointInfo {
     //! The initial point being considered.
@@ -40,3 +42,4 @@ struct MandelbrotPointInfo {
 
 MandelbrotPointInfo compute_mandelbrot(d_complex c, int max_iters,
                                        bool collect_points = false);
+d_complex gen_complex(double min_x,double max_x,double min_y,double max_y);
