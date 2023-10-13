@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <cassert>
+#include <algorithm>
+
 
 
 using std::vector;
@@ -83,6 +85,13 @@ public:
     //! Decrements the value of the pixel at (x, y).
     void decValue(int x, int y) {
         data[indexOf(x, y)]--;
+    }
+
+
+    //! returns highest value in data
+    int highestValue(){
+        int max = *std::max_element(data.begin(),data.end());
+        return max;
     }
 };
 

@@ -14,17 +14,31 @@ double normalise(double value, double min, double max)
     return (value - min)/(max - min);
 }
 
-std::pair<int,int> map_complex(complex<double> c, int image_size)
+void update_image(Image myImage,MandelbrotPointInfo cPointInfo)
 {
-    double x = c.real();
-    double y = c.imag();
+    vector<d_complex> points = cPointInfo.points_in_path;
+    int image_size = myImage.getHeight();
+    for(int i = 0; i < points.size(); i++)
+    {
+        d_complex c = points.at(i);
+        if(-2.0 <= c.real() && c.real() <= 1.0 && -1.5 <= c.imag() && c.imag() <= 1.5)
+        {
+            double x = c.real();
+            double y = c.imag();
+            double norm_x = normalise(x, x_min, x_max);
+            double norm_y = normalise(y, y_min, y_max);
+            int coord_x = round(norm_x * (image_size-1));
+            int coord_y = round(norm_y * (image_size-1));
+            myImage.incValue(coord_x, coord_y);
+            myImage.incValue(coord_x, (myImage.getHeight() - coord_y -1));
 
-    double norm_x = normalise(x, x_min, x_max);
-    double norm_y = normalise(y, y_min, y_max);
-    int coord_x = round(norm_x * image_size);
-    int coord_y = round(norm_y * image_size);
-    std::pair<int,int> coords(coord_x,coord_y);
-    return coords;
+        }
+    }
+}
+
+void output_image_to_pgm(Image myImage)
+{
+    std::ofstream file("image.pgm");
 }
 
 
@@ -35,19 +49,24 @@ int main(int argc, char **argv)
     //     std::cerr << "Error wrong number of arguments given";
     //     return 1;
     // }
-    // int image_size = std::atoi(argv[1]);
-    // int number_of_points = std::atoi(argv[2]);
-    // int max_iters = std::atoi(argv[3]);
-    for(int i = 0; i < 10;i++)
+    int image_size = std::atoi(argv[1]);
+    int number_of_points = std::atoi(argv[2]);
+    int max_iters = std::atoi(argv[3]);
+    Image myImage = Image(image_size,image_size);
+
+    
+    for(int i =0; i < number_of_points;i++)
     {
     complex<double> c = gen_complex(x_min, x_max, y_min, y_max);
-    std::pair<int,int> coords = map_complex(c,600);
-    int x = coords.first;
-    int y = coords.second;
-    std::cout << c << " ";
-    std::cout << x << " "<< y << std::endl;
+    MandelbrotPointInfo cPointInfo = compute_mandelbrot(c,max_iters,true);
+    update_image(myImage, cPointInfo);
+    if( i% 10000 == 0 && i != 0)
+    {
+        std::cout << "10000 lines done \n";
+        std::cout << i;
     }
-
-
+    }
+    
+    std::cout << "the highest value is " << myImage.highestValue();
     return 0;
 }
