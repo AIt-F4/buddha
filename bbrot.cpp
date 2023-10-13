@@ -38,7 +38,7 @@ void update_image(Image myImage,MandelbrotPointInfo cPointInfo)
 
 void output_image_to_pgm(Image myImage)
 {
-    std::ofstream file("image.pgm");
+    // std::ofstream file("image.pgm");
 }
 
 
