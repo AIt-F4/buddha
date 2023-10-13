@@ -89,10 +89,20 @@ public:
 
 
     //! returns highest value in data
-    int highestValue(){
+    int getHighestValue(){
         int max = *std::max_element(data.begin(),data.end());
         return max;
     }
+    
+    //! returns the number of elements in data
+    int getSize(){
+        return data.size();
+    }
+
+    vector<int> getData(){
+        return data;
+    }
+    
 };
 
 #endif // IMAGE_H

@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <utility>
+#include <fstream>
 
 const double x_min = -2.0;
 const double x_max = 1.0;
@@ -14,7 +15,7 @@ double normalise(double value, double min, double max)
     return (value - min)/(max - min);
 }
 
-void update_image(Image myImage,MandelbrotPointInfo cPointInfo)
+void update_image(Image  &myImage,MandelbrotPointInfo cPointInfo)
 {
     vector<d_complex> points = cPointInfo.points_in_path;
     int image_size = myImage.getHeight();
@@ -38,17 +39,34 @@ void update_image(Image myImage,MandelbrotPointInfo cPointInfo)
 
 void output_image_to_pgm(Image myImage)
 {
-    // std::ofstream file("image.pgm");
+    vector<int> imageData = myImage.getData();
+    std::ofstream file("image.pgm");
+    file << "P2 " << myImage.getWidth() << " " << myImage.getHeight() << " 255\n";
+
+    for(int i = 0; i< myImage.getSize(); i++)
+    {
+        //normalise the values for each pixel to the range 0 to 255 for greyscale image
+        
+        int greyscaleValue = round(normalise(imageData[i],0,myImage.getHighestValue())*255);
+        file << greyscaleValue << " ";
+        if(i % 1000 == 0)
+        {
+        std::cout<< greyscaleValue << std::endl;
+        }
+    }
+    
+
+        
 }
 
 
 int main(int argc, char **argv)
 {
-    // if(argc != 4)
-    // {
-    //     std::cerr << "Error wrong number of arguments given";
-    //     return 1;
-    // }
+    if(argc != 4)
+    {
+        std::cerr << "Error wrong number of arguments given";
+        return 1;
+    }
     int image_size = std::atoi(argv[1]);
     int number_of_points = std::atoi(argv[2]);
     int max_iters = std::atoi(argv[3]);
@@ -62,11 +80,11 @@ int main(int argc, char **argv)
     update_image(myImage, cPointInfo);
     if( i% 10000 == 0 && i != 0)
     {
-        std::cout << "10000 lines done \n";
-        std::cout << i;
+        std::cout << i << " lines done" << std::endl;
     }
     }
     
-    std::cout << "the highest value is " << myImage.highestValue();
+    std::cout << "the highest value is " << myImage.getHighestValue();
+    output_image_to_pgm(myImage);
     return 0;
 }
