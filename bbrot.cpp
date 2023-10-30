@@ -40,18 +40,30 @@ void update_image(Image  &myImage,MandelbrotPointInfo cPointInfo)
 void output_image_to_pgm(Image myImage)
 {
     vector<int> imageData = myImage.getData();
-    std::ofstream file("image.pgm");
-    file << "P2 " << myImage.getWidth() << " " << myImage.getHeight() << " 255\n";
+    vector<int>::iterator iter = imageData.begin();
+    
+    vector<int> pixelValues = {};
+    int j = myImage.getHighestValue();
 
-    for(int i = 0; i< myImage.getSize(); i++)
+    for(iter; iter < imageData.end(); iter++)
     {
         //normalise the values for each pixel to the range 0 to 255 for greyscale image
         
-        int greyscaleValue = round(normalise(imageData[i],0,myImage.getHighestValue())*255);
-        file << greyscaleValue << " ";
-        if(i % 1000 == 0)
+        int greyscaleValue = round(normalise(*iter,0,j)*255);
+        pixelValues.push_back(greyscaleValue);
+    }
+    std::cout << "greyscale values generated";
+    std::ofstream file("image.pgm");
+    file << "P2 " << myImage.getWidth() << " " << myImage.getHeight() << " 255\n";
+    for(int i = 0; i < pixelValues.size(); i++)
+    {
+        if(i == 0)
         {
-        std::cout<< greyscaleValue << std::endl;
+            file << pixelValues[i];
+        }
+        else
+        {
+        file << " " << pixelValues[i];
         }
     }
     
@@ -77,7 +89,10 @@ int main(int argc, char **argv)
     {
     complex<double> c = gen_complex(x_min, x_max, y_min, y_max);
     MandelbrotPointInfo cPointInfo = compute_mandelbrot(c,max_iters,true);
+    if (cPointInfo.escaped == true)
+    {
     update_image(myImage, cPointInfo);
+    }
     if( i% 10000 == 0 && i != 0)
     {
         std::cout << i << " lines done" << std::endl;
