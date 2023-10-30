@@ -4,17 +4,18 @@
 #include <cmath>
 #include <utility>
 #include <fstream>
-
+// Initialising the ranges of real and imaginary values for the complex number
 const double x_min = -2.0;
 const double x_max = 1.0;
 const double y_min = -1.5;
 const double y_max = 1.5;
 
+// normalise a number in a range over 0-1
 double normalise(double value, double min, double max)
 {
     return (value - min)/(max - min);
 }
-
+// takes a vector of complex points and increments the pixel values of points in the vector
 void update_image(Image  &myImage,MandelbrotPointInfo cPointInfo)
 {
     vector<d_complex> points = cPointInfo.points_in_path;
@@ -36,7 +37,7 @@ void update_image(Image  &myImage,MandelbrotPointInfo cPointInfo)
         }
     }
 }
-
+//outputs the image and its greyscale values to pgm file format
 void output_image_to_pgm(Image myImage)
 {
     vector<int> imageData = myImage.getData();
@@ -74,6 +75,7 @@ void output_image_to_pgm(Image myImage)
 
 int main(int argc, char **argv)
 {
+    // if the wrong number of args are given throws error
     if(argc != 4)
     {
         std::cerr << "Error wrong number of arguments given";
@@ -84,7 +86,7 @@ int main(int argc, char **argv)
     int max_iters = std::atoi(argv[3]);
     Image myImage = Image(image_size,image_size);
 
-    
+    //generates a number of random complext numbers equal to the given arguement and plots their escape paths
     for(int i =0; i < number_of_points;i++)
     {
     complex<double> c = gen_complex(x_min, x_max, y_min, y_max);
